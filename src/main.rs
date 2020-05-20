@@ -71,4 +71,8 @@ fn main() {
      }
 
      // more program logic goes here...
+     let context = zmq::Context::new();
+     let responder = context.socket(zmq::REP).unwrap();
+ 
+     assert!(responder.bind("tcp://*:5555").is_ok());
 }
