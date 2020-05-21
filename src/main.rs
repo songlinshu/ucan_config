@@ -1,7 +1,7 @@
 extern crate clap;
 use clap::{App, Arg, SubCommand};
 
-fn main() {
+fn cli_interface() {
      let matches = App::new("ucan_config")
           .version("1.0")
           .author("https://ucandevices.github.io/")
@@ -69,6 +69,11 @@ fn main() {
           2 => println!("Tons of verbose info"),
           3 | _ => println!("Don't be crazy"),
      }
+}
+
+fn main() {
+     
+     cli_interface();
 
      // more program logic goes here...
      let context = zmq::Context::new();
