@@ -1,5 +1,7 @@
 extern crate clap;
 use clap::{App, Arg, SubCommand};
+use std::time::Duration;
+use std::thread;
 
 fn cli_interface() {
      let matches = App::new("ucan_config")
@@ -78,6 +80,25 @@ fn main() {
      // more program logic goes here...
      let context = zmq::Context::new();
      let responder = context.socket(zmq::REP).unwrap();
- 
-     assert!(responder.bind("tcp://*:5555").is_ok());
+
+     let start_port : u16 = 770;
+     let end_port : u16 = 800;
+     let endpoint = "tcp://*:";
+
+     for x in start_port..end_port {
+          let endpoint_port = endpoint.to_owned() + &x.to_string();
+          let ret = responder.bind(&endpoint_port).is_ok();
+          if ret {
+               break;
+          }
+     }
+
+     let mut msg = zmq::Message::new();
+     loop {
+          responder.recv(&mut msg, 0).unwrap();
+          println!("Received {}", msg.as_str().unwrap());
+          thread::sleep(Duration::from_millis(1000));
+          responder.send("World", 0).unwrap();
+     }
+
 }
