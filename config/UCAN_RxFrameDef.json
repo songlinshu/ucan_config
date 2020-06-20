@@ -1,0 +1,35 @@
+{
+	"frame_type" : 0,
+	"can_rx_header" : {
+		"Identifier" : 0,
+		"IdType" : 0,
+		"RxFrameType": 0,
+		"DataLength" : 0,
+		"ErrorStateIndicator" : 0,
+		"BitRateSwitch" : 0,
+		"FDFormat" : 0,
+		"RxTimestamp" : 0,
+		"FilterIndex" : 0,
+		"IsFilterMatchingFrame" : 0
+	},
+	"can_data" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	"protocol_status" : {
+		"LastErrorCode": 0,
+		"DataLastErrorCode": 0,
+		"Activity": 0,
+		"ErrorPassive": 0,
+		"Warning": 0,
+		"BusOff": 0,
+		"RxESIflag": 0,
+		"RxBRSflag": 0,
+		"RxFDFflag": 0,
+		"ProtocolException": 0,
+		"TDCvalue": 0
+	},
+	"error_counters" : {
+		"TxErrorCnt" : 0,
+		"RxErrorCnt" : 0,
+		"RxErrorPassive" : 0,
+		"ErrorLogging" : 0
+	}
+}

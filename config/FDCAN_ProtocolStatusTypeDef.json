@@ -1,0 +1,13 @@
+{
+	"LastErrorCode": 0,
+	"DataLastErrorCode": 0,
+	"Activity": 0,
+	"ErrorPassive": 0,
+	"Warning": 0,
+	"BusOff": 0,
+	"RxESIflag": 0,
+	"RxBRSflag": 0,
+	"RxFDFflag": 0,
+	"ProtocolException": 0,
+	"TDCvalue": 0
+}
