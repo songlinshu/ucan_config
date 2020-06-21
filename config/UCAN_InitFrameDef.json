@@ -1,0 +1,22 @@
+{
+	"frame_type" : 0,
+	"can_init" : {
+		"ClockDivider" : 0,
+		"FrameFormat" : 0,
+		"Mode": 0,
+		"AutoRetransmission" : 0,
+		"TransmitPause" : 0,
+		"ProtocolException" : 0,
+		"NominalPrescaler" : 0,
+		"NominalSyncJumpWidth" : 0,
+		"NominalTimeSeg1" : 0,
+		"NominalTimeSeg2" : 0,
+		"DataPrescaler" : 0,
+		"DataSyncJumpWidth" : 0,
+		"DataTimeSeg1" : 0,
+		"DataTimeSeg2" : 0,
+		"StdFiltersNbr" : 0,
+		"ExtFiltersNbr" : 0,
+		"TxFifoQueueMode" : 0
+	}
+}

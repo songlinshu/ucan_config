@@ -1,0 +1,48 @@
+{
+	"frame_type" : 0,
+	"cmd_status" : 0,
+	"can_protocol_status": {
+		"LastErrorCode": 0,
+		"DataLastErrorCode": 0,
+		"Activity": 0,
+		"ErrorPassive": 0,
+		"Warning": 0,
+		"BusOff": 0,
+		"RxESIflag": 0,
+		"RxBRSflag": 0,
+		"RxFDFflag": 0,
+		"ProtocolException": 0,
+		"TDCvalue": 0
+	},
+	"can_error_counters" : {
+		"TxErrorCnt" : 0,
+		"RxErrorCnt" : 0,
+		"RxErrorPassive" : 0,
+		"ErrorLogging" : 0
+	},
+	"can_init_structure" : {
+		"ClockDivider" : 0,
+		"FrameFormat" : 0,
+		"Mode": 0,
+		"AutoRetransmission" : 0,
+		"TransmitPause" : 0,
+		"ProtocolException" : 0,
+		"NominalPrescaler" : 0,
+		"NominalSyncJumpWidth" : 0,
+		"NominalTimeSeg1" : 0,
+		"NominalTimeSeg2" : 0,
+		"DataPrescaler" : 0,
+		"DataSyncJumpWidth" : 0,
+		"DataTimeSeg1" : 0,
+		"DataTimeSeg2" : 0,
+		"StdFiltersNbr" : 0,
+		"ExtFiltersNbr" : 0,
+		"TxFifoQueueMode" : 0
+	},
+	"dev_desc" : {
+		"sw_version" : 0,
+		"hw_version" : 9,
+		"dev_type" : 0,
+		"serial_number" : [0, 0, 0, 0, 0, 0, 0, 0]
+	}
+}

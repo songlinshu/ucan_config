@@ -1,0 +1,8 @@
+{
+	"StandardFilterSA" : 0,
+	"ExtendedFilterSA" : 0,
+	"RxFIFO0SA": 0,
+	"RxFIFO1SA" : 0,
+	"TxEventFIFOSA" : 0,
+	"TxFIFOQSA" : 0
+}

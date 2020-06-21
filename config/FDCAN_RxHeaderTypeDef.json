@@ -1,0 +1,12 @@
+{
+	"Identifier" : 0,
+	"IdType" : 0,
+	"RxFrameType": 0,
+	"DataLength" : 0,
+	"ErrorStateIndicator" : 0,
+	"BitRateSwitch" : 0,
+	"FDFormat" : 0,
+	"RxTimestamp" : 0,
+	"FilterIndex" : 0,
+	"IsFilterMatchingFrame" : 0
+}

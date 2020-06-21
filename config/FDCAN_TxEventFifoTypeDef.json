@@ -1,0 +1,12 @@
+{
+	"Identifier" : 0,
+	"IdType" : 0,
+	"TxFrameType": 0,
+	"DataLength" : 0,
+	"ErrorStateIndicator" : 0,
+	"BitRateSwitch" : 0,
+	"FDFormat" : 0,
+	"TxTimestamp" : 0,
+	"MessageMarker" : 0,
+	"EventType" : 0
+}
