@@ -3,17 +3,21 @@ extern crate libusb;
 
 mod bindings;
 
+use serde::Deserialize;
+use std::sync::mpsc;
 use std::time::Duration;
 use std::fs::File;
 use std::io::Read;
 use clap::{App, Arg};
 use std::path::Path;
+use ::core::mem;
 
 const PRODUCT_ID: u16 = 0x775;
 
+
 fn send_data(data: &[u8]) {
 
-    let context = libusb::Context::new().unwrap();
+    let context:libusb::Context = libusb::Context::new().unwrap();
 
     for device in context.devices().unwrap().iter() {
         let device_desc = device.device_descriptor().unwrap();
@@ -23,18 +27,60 @@ fn send_data(data: &[u8]) {
 
             let mut dev_handle = handle.unwrap();
             let ret_claim = dev_handle.claim_interface(0);
+            
+            // let child = thread::spawn(move || 
+            //     {
+            //         let timeout = Duration::new(1, 0);
+            //         let mut buf: [u8; 150] =  unsafe { mem::uninitialized() };      
+            //         let ret_bulk_read = dev_handle.read_bulk(0x81, &mut buf ,timeout);
+            
+            //         match ret_bulk_read {
+            //             Ok(val) => 
+            //             {
+            //                 print!("RX bytes len: {:?}\n", val);
+            //                 let ackfrm : bindings::UCAN_AckFrameDef = bincode::deserialize(&buf).unwrap();
+            //                 print!("ACK frame {:?}", ackfrm);
+            
+            //             },
+            //             Err(e) => println!("error ACK ret_bulk: {:?}", e),
+            //         }
+            //     });
 
             if ret_claim.is_ok() {
+                println!("Device claimed data to be send {:?} ",data);
                 let data_to_send : &[u8] = data;
 
-                let timeout = Duration::new(2, 0);
+                let timeout = Duration::new(1, 0);
                 let ret_bulk = dev_handle.write_bulk(0x01, data_to_send, timeout);
 
-                print!("Sent bytes: {:?}\n", ret_bulk.unwrap());
+                match ret_bulk {
+                    Ok(_v) => print!("Sent bytes: {:?}\n", ret_bulk.unwrap()),
+                    Err(e) => println!("error ret_bulk: {:?}", e),
+                }  
             }
             else {
                 println!("Unable to access the requested interface");
             }
+            
+            // thread::sleep(time::Duration::from_millis(200));
+            
+            let timeout = Duration::new(20, 0);
+            let mut buf: [u8; 512] =  unsafe { mem::uninitialized() };      
+            let ret_bulk_read = dev_handle.read_bulk(0x81, &mut buf ,timeout);
+    
+            match ret_bulk_read {
+                Ok(val) => 
+                {
+                    print!("RX bytes len: {:?}\n", val);
+                    // let ackfrm : bindings::UCAN_AckFrameDef = bincode::deserialize(&buf).unwrap();
+                    // print!("ACK frame {:?}", ackfrm);
+    
+                },
+                Err(e) => println!("error ACK ret_bulk: {:?}", e),
+            }
+          
+
+            // let res = child.join();
         }
     }
 }
@@ -181,11 +227,19 @@ fn cli_interface() {
             .takes_value(true))
         .get_matches();
 
-    let frame_type = matches.value_of("frame_type");
+    // let frame_type = matches.value_of("frame_type");
 
-    parse_frame(frame_type);
+    // parse_frame(frame_type);
+    let buffer = read_data_from_json("UCAN_InitFrameDef.json");
+            let frame: bindings::UCAN_InitFrameDef = serde_json::from_str(&buffer).unwrap();
+            let bytes = bincode::serialize(&frame).unwrap();
+            send_data(bytes.as_slice());
 }
 
+use std::{thread, time};
 fn main() {
+
     cli_interface();
+    
+    println!("exit");
 }
