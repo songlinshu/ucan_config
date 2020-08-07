@@ -13,7 +13,7 @@ pub const UCAN_SERIAL_NO_SIZE: u32 = 8;
 pub type FDCAN_GlobalTypeDef = u32;
 pub const FunctionalState_DISABLE: FunctionalState = 0;
 pub const FunctionalState_ENABLE: FunctionalState = 1;
-pub type FunctionalState = i32;
+pub type FunctionalState = u8;
 pub const HAL_StatusTypeDef_HAL_OK: HAL_StatusTypeDef = 0;
 pub const HAL_StatusTypeDef_HAL_ERROR: HAL_StatusTypeDef = 1;
 pub const HAL_StatusTypeDef_HAL_BUSY: HAL_StatusTypeDef = 2;
@@ -58,6 +58,7 @@ pub type HAL_FDCAN_StateTypeDef = i32;
     #[doc = "< Enable or disable the Protocol Exception Handling."]
     #[doc = "This parameter can be set to ENABLE or DISABLE"]
     pub ProtocolException: FunctionalState,
+    pub PaddingInitData: u8,    
     #[doc = "< Specifies the value by which the oscillator frequency is"]
     #[doc = "divided for generating the nominal bit time quanta."]
     #[doc = "This parameter must be a number between 1 and 512"]

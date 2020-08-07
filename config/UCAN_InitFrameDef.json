@@ -6,6 +6,7 @@
 		"Mode": 0,
 		"AutoRetransmission" : 0,
 		"TransmitPause" : 0,
+		"PaddingInitData" : 0,
 		"ProtocolException" : 0,
 		"NominalPrescaler" : 0,
 		"NominalSyncJumpWidth" : 0,
