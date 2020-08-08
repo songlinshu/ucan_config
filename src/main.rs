@@ -13,7 +13,7 @@ use std::path::Path;
 use ::core::mem;
 
 const PRODUCT_ID: u16 = 0x775;
-
+const CONFIG_PATH: &str = "./../../config/";
 
 fn send_data(data: &[u8]) {
 
@@ -67,14 +67,27 @@ fn send_data(data: &[u8]) {
             let timeout = Duration::new(20, 0);
             let mut buf: [u8; 512] =  unsafe { mem::uninitialized() };      
             let ret_bulk_read = dev_handle.read_bulk(0x81, &mut buf ,timeout);
+            
+            // FOR ACK
+            // match ret_bulk_read {
+            //     Ok(val) => 
+            //     {
+            //         print!("RX bytes len: {:?}\n", val);
+            //         let ackfrm : bindings::UCAN_AckFrameDef = bincode::deserialize(&buf).unwrap();
+            //         print!("ACK frame {:?}", ackfrm);
     
+            //     },
+            //     Err(e) => println!("error ACK ret_bulk: {:?}", e),
+            // }
             match ret_bulk_read {
                 Ok(val) => 
                 {
-                    print!("RX bytes len: {:?}\n", val);
-                    let ackfrm : bindings::UCAN_AckFrameDef = bincode::deserialize(&buf).unwrap();
-                    print!("ACK frame {:?}", ackfrm);
-    
+                    print!("CAN RX bytes len: {:?}\n", val);
+                    let ackfrm : bindings::UCAN_RxFrameDef = bincode::deserialize(&buf).unwrap();
+                    print!("CAN RX frame {:?}", ackfrm.can_rx_header);
+                    // ackfrm.can_data.iter().map(|x| print!(",{}",x));
+                    println!(" ");
+                    
                 },
                 Err(e) => println!("error ACK ret_bulk: {:?}", e),
             }
@@ -230,10 +243,18 @@ fn cli_interface() {
     // let frame_type = matches.value_of("frame_type");
 
     // parse_frame(frame_type);
-    let buffer = read_data_from_json("./../../config/UCAN_InitFrameDef.json");
-            let frame: bindings::UCAN_InitFrameDef = serde_json::from_str(&buffer).unwrap();
+    // let buffer = read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_InitFrameDef.json"));
+    //         let frame: bindings::UCAN_InitFrameDef = serde_json::from_str(&buffer).unwrap();
+    //         let bytes = bincode::serialize(&frame).unwrap();
+    //         send_data(bytes.as_slice());
+
+    println!("TX frame");
+    let buffer = read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_TxFrameDef.json"));
+            let frame: bindings::UCAN_TxFrameDef = serde_json::from_str(&buffer).unwrap();
             let bytes = bincode::serialize(&frame).unwrap();
             send_data(bytes.as_slice());
+
+    
 }
 
 use std::{thread, time};
