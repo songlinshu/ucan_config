@@ -1,5 +1,5 @@
 {
-	"frame_type" : 0,
+	"frame_type" : 7,
 	"cmd_status" : 0,
 	"can_protocol_status": {
 		"LastErrorCode": 0,

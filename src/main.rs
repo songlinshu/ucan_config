@@ -243,10 +243,12 @@ fn cli_interface() {
     // let frame_type = matches.value_of("frame_type");
 
     // parse_frame(frame_type);
+    // println!("Init CAN frame");
     // let buffer = read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_InitFrameDef.json"));
     //         let frame: bindings::UCAN_InitFrameDef = serde_json::from_str(&buffer).unwrap();
     //         let bytes = bincode::serialize(&frame).unwrap();
     //         send_data(bytes.as_slice());
+
 
     println!("TX frame");
     let buffer = read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_TxFrameDef.json"));
