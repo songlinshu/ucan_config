@@ -3,7 +3,7 @@
 	"can_init" : {
 		"ClockDivider" : 0,
 		"FrameFormat" : 0,
-		"Mode": 0,
+		"Mode": 4,
 		"AutoRetransmission" : 0,
 		"TransmitPause" : 0,
 		"PaddingInitData" : 0,

@@ -1563,8 +1563,8 @@ fn bindgen_test_layout_UCAN_DeinitFrameDef() {
 #[derive(Copy, Clone, Serialize, Deserialize)] pub struct UCAN_TxFrameDef {
     #[doc = "< Frame type is @ref UCAN_FD_TX."]
     pub frame_type: UCAN_FRAME_TYPE,
-    #[doc = "< FDCAN Tx event FIFO structure definition @ref FDCAN_TxEventFifoTypeDef."]
-    pub can_tx_header: FDCAN_TxEventFifoTypeDef,
+    #[doc = "< FDCAN Tx event FIFO structure definition @ref FDCAN_TxHeaderTypeDef."]
+    pub can_tx_header: FDCAN_TxHeaderTypeDef,
      #[serde(with = "BigArray")]
  pub can_data: [u8; 64usize], 
 }

@@ -8,9 +8,8 @@
 		"ErrorStateIndicator" : 0,
 		"BitRateSwitch" : 0,
 		"FDFormat" : 0,
-		"TxTimestamp" : 0,
-		"MessageMarker" : 0,
-		"EventType" : 0
+		"TxEventFifoControl" : 0,
+		"MessageMarker" : 0		
 	},
 	"can_data" : [5, 4, 3, 7,8, 9, 10, 11, 12, 13, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
