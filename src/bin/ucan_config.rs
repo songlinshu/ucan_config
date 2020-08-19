@@ -2,6 +2,7 @@ extern crate clap;
 extern crate libusb;
 
 mod bindings;
+mod common;
 
 use serde::Deserialize;
 use std::sync::mpsc;
@@ -9,6 +10,7 @@ use std::time::Duration;
 use std::fs::File;
 use std::io::Read;
 use clap::{App, Arg};
+use std::{thread, time};
 use std::path::Path;
 use ::core::mem;
 
@@ -74,9 +76,9 @@ fn send_data(data: &[u8], wait_for_rx: bool) {
             match ret_bulk_read {
                 Ok(val) => 
                 {
-                    print!("RX bytes len: {:?}\n", val);
+                    println!("RX bytes len: {:?}\n", val);
                     let ackfrm : bindings::UCAN_AckFrameDef = bincode::deserialize(&buf).unwrap();
-                    print!("ACK frame {:?}", ackfrm);
+                    println!("ACK frame {:?}", ackfrm);
     
                 },
                 Err(e) => println!("error ACK ret_bulk: {:?}", e),
@@ -107,119 +109,6 @@ fn send_data(data: &[u8], wait_for_rx: bool) {
     }
 }
 
-fn read_data_from_json(filename: &str) -> String {
-    let path = Path::new(filename);
-    // let mut file = File::open("UCAN_TxFrameDef.json").unwrap();
-    let mut file = File::open(path).unwrap();
-    let mut buffer = String::new();
-
-    file.read_to_string(&mut buffer).unwrap();
-
-    buffer
-}
-
-// fn parse_frame(frame_type : Option<&str>) {
-//     match frame_type {
-//         Some("1") => {
-//             let buffer = read_data_from_json("UCAN_AckFrameDef.json");
-//             let frame: bindings::UCAN_AckFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("2") => {
-//             let buffer = read_data_from_json("UCAN_DeinitFrameDef.json");
-//             let frame: bindings::UCAN_DeinitFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("3") => {
-//             let buffer = read_data_from_json("UCAN_Get_CAN_Status.json");
-//             let frame: bindings::UCAN_Get_CAN_Status = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("4") => {
-//             let buffer = read_data_from_json("UCAN_GoToBootladerFrameDef.json");
-//             let frame: bindings::UCAN_GoToBootladerFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("5") => {
-//             let buffer = read_data_from_json("UCAN_InitFrameDef.json");
-//             let frame: bindings::UCAN_InitFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("6") => {
-//             let buffer = read_data_from_json("UCAN_RxFrameDef.json");
-//             let frame: bindings::UCAN_RxFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("7") => {
-//             let buffer = read_data_from_json("UCAN_SaveConfigFrameDef.json");
-//             let frame: bindings::UCAN_SaveConfigFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("8") => {
-//             let buffer = read_data_from_json("UCAN_TxFrameDef.json");
-//             let frame: bindings::UCAN_TxFrameDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("9") => {
-//             let buffer = read_data_from_json("FDCAN_Device_DescritionDef.json");
-//             let frame: bindings::FDCAN_Device_DescritionDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("10") => {
-//             let buffer = read_data_from_json("FDCAN_ErrorCountersTypeDef.json");
-//             let frame: bindings::FDCAN_ErrorCountersTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("11") => {
-//             let buffer = read_data_from_json("FDCAN_InitTypeDef.json");
-//             let frame: bindings::FDCAN_InitTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("12") => {
-//             let buffer = read_data_from_json("FDCAN_MsgRamAddressTypeDef.json");
-//             let frame: bindings::FDCAN_MsgRamAddressTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("13") => {
-//             let buffer = read_data_from_json("FDCAN_ProtocolStatusTypeDef.json");
-//             let frame: bindings::FDCAN_ProtocolStatusTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("14") => {
-//             let buffer = read_data_from_json("FDCAN_RxHeaderTypeDef.json");
-//             let frame: bindings::FDCAN_RxHeaderTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("15") => {
-//             let buffer = read_data_from_json("FDCAN_TxEventFifoTypeDef.json");
-//             let frame: bindings::FDCAN_TxEventFifoTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         Some("16") => {
-//             let buffer = read_data_from_json("FDCAN_TxHeaderTypeDef.json");
-//             let frame: bindings::FDCAN_TxHeaderTypeDef = serde_json::from_str(&buffer).unwrap();
-//             let bytes = bincode::serialize(&frame).unwrap();
-//             send_data(bytes.as_slice());
-//         },
-//         _ => { println!("Unknown parameter")}
-//     }
-// }
-
 fn cli_interface() {
     let matches = App::new("ucan_config")
         .version("1.0")
@@ -228,24 +117,9 @@ fn cli_interface() {
         .arg(Arg::with_name("frame_type")
             .short("f")
             .long("frame_type")
-            .help("1 - UCAN_AckFrameDef\n\
-                    2 - UCAN_DeinitFrameDef\n\
-                    3 - UCAN_Get_CAN_Status\n\
-                    4 - UCAN_GoToBootladerFrameDef\n\
-                    5 - UCAN_InitFrameDef\n\
-                    6 - UCAN_RxFrameDef\n\
-                    7 - UCAN_SaveConfigFrameDef\n\
-                    8 - UCAN_TxFrameDef\n\
-                    9 - FDCAN_Device_DescritionDef\n\
-                    10 - FDCAN_ErrorCountersTypeDef\n\
-                    11 - FDCAN_InitTypeDef\n\
-                    12 - FDCAN_MsgRamAddressTypeDef\n\
-                    13 - FDCAN_ProtocolStatusTypeDef\n\
-                    14 - FDCAN_RxHeaderTypeDef\n\
-                    15 - FDCAN_TxEventFifoTypeDef\n\
-                    16 - FDCAN_TxHeaderTypeDef")
+            .help("")
             .value_name("1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16")
-            .required(true)
+            .required(false)
             .takes_value(true))
         .get_matches();
 
@@ -253,21 +127,32 @@ fn cli_interface() {
 
     // parse_frame(frame_type);
     println!("Init CAN frame");
-    let buffer = read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_InitFrameDef.json"));
+    let buffer = common::read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_InitFrameDef.json"));
             let frame: bindings::UCAN_InitFrameDef = serde_json::from_str(&buffer).unwrap();
             let bytes = bincode::serialize(&frame).unwrap();
             send_data(bytes.as_slice(), false);
 
     
+    let context = zmq::Context::new();
+    let responder = context.socket(zmq::REP).unwrap();
 
-    println!("TX frame in loopback");
-    let buffer = read_data_from_json(&format!("{0}{1}",CONFIG_PATH,"UCAN_TxFrameDef.json"));
-            let frame: bindings::UCAN_TxFrameDef = serde_json::from_str(&buffer).unwrap();
-            let bytes = bincode::serialize(&frame).unwrap();
-            send_data(bytes.as_slice(), true);    
+    assert!(responder.bind("tcp://*:5555").is_ok());
+
+    let mut msg = zmq::Message::new();
+    loop {
+        // thread::sleep(Duration::from_millis(10));
+        // responder.recv(&mut msg, 0).unwrap();
+        println!("TX frame in loopback");
+        let zmqData = responder.recv_bytes(0).unwrap();
+        // println!("Received {}", zmqData);  
+        // let frame: bindings::UCAN_TxFrameDef = serde_json::from_str(&buffer).unwrap();
+        // let bytes = bincode::serialize(&frame).unwrap();
+        send_data(&zmqData, true);    
+        // send_data(bytes.as_slice(), true);    
+        responder.send("OK", 0).unwrap();
+    }
 }
 
-use std::{thread, time};
 fn main() {
 
     cli_interface();
