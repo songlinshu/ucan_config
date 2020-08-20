@@ -13,6 +13,8 @@ use clap::{App, Arg};
 use std::{thread, time};
 use std::path::Path;
 use ::core::mem;
+use std::io::Write;
+use std::str::FromStr;
 
 const PRODUCT_ID: u16 = 0x775;
 const CONFIG_PATH: &str = "./../../config/";
@@ -111,17 +113,59 @@ fn send_data(data: &[u8], wait_for_rx: bool) {
 
 fn cli_interface() {
     let matches = App::new("ucan_config")
-        .version("1.0")
-        .author("https://ucandevices.github.io/")
-        .about("Configuration for CAN devices")
-        .arg(Arg::with_name("frame_type")
-            .short("f")
-            .long("frame_type")
-            .help("")
-            .value_name("1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16")
-            .required(false)
-            .takes_value(true))
-        .get_matches();
+    .version("1.0")
+    .author("https://ucandevices.github.io/")
+    .about("Configuration for CAN devices")
+    .arg(Arg::with_name("protocol")
+         .short("p")
+         .long("protocol")
+         .help("Device protocol")
+         .value_name("usb|virtual")
+         .required(false)
+         .takes_value(true))
+    .arg(Arg::with_name("id")
+         .short("i")
+         .long("id")
+         .help("Device hardware ID")
+         .required(false)
+         .value_name("ex. 0x01234")
+         .takes_value(true))
+    .arg(Arg::with_name("dev_number")
+         .help("Device number on uCAN network in fomat from 0 .. 100")
+         .required(false)
+         .short("d")
+         .long("devno")
+         .takes_value(true))
+    .arg(Arg::with_name("baundrate")
+         .help("CAN baudrate in kBPS ex 1M 100k 100000")
+         .required(false)
+         .short("b")
+         .long("baudrate")
+         .takes_value(true))
+    .arg(Arg::with_name("mode")
+         .help("CAN mode")
+         .short("m")
+         .required(false)
+         .value_name("loopback|normal|monitor")
+         .long("mode")
+         .takes_value(true))
+    .arg(Arg::with_name("config_file_path")
+         .help("Path with config file")
+         .short("c")
+         .required(false)
+         .long("config")
+         .takes_value(true))           
+    .get_matches();
+
+    let mut devNo: u16 = 0;
+    if let Some(o) = matches.value_of("dev_number") {
+        devNo = u16::from_str(o).unwrap_or(0);
+        println!("Value for dev_number: {}", devNo);
+    }
+
+    if let Some(p) = matches.value_of("protocol") {
+        println!("Value for protocol: {}", p);
+    }
 
     // let frame_type = matches.value_of("frame_type");
 
@@ -136,15 +180,20 @@ fn cli_interface() {
     let context = zmq::Context::new();
     let responder = context.socket(zmq::REP).unwrap();
 
-    assert!(responder.bind("tcp://*:5555").is_ok());
+    // let mut w = Vec::new();
+    // write!(&mut w, "tcp://*:{}!", "{}");
 
+    let bb: &str = &(common::ZERO_MQ_STARTING_PORT + devNo).to_string();
+    println!("zeroMQ port:{}",bb);
+    assert!(responder.bind(&format!("tcp://*:{}",bb)).is_ok());
+    
     let mut msg = zmq::Message::new();
     loop {
         // thread::sleep(Duration::from_millis(10));
         // responder.recv(&mut msg, 0).unwrap();
         println!("TX frame in loopback");
         let zmqData = responder.recv_bytes(0).unwrap();
-        // println!("Received {}", zmqData);  
+        println!("Received zmq");  
         // let frame: bindings::UCAN_TxFrameDef = serde_json::from_str(&buffer).unwrap();
         // let bytes = bincode::serialize(&frame).unwrap();
         send_data(&zmqData, true);    

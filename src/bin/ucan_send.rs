@@ -4,12 +4,15 @@ extern crate libusb;
 mod bindings;
 use std::{thread, time};
 use clap::{App, Arg};
+use std::io::Write;
+use std::str::FromStr;
+
 
 mod common;
 
 const CONFIG_PATH: &str = "./../../config/";
 
-fn cli_interface() {
+fn cli_interface() -> u16 {
     let matches = App::new("ucan_send")
         .version("1.0")
         .author("https://ucandevices.github.io/")
@@ -17,7 +20,7 @@ fn cli_interface() {
         .arg(Arg::with_name("interfaceName")
             .long("dev")
             .short("d")
-            .help("Device/Interface name ex. can0")            
+            .help("Device/Interface number from 0.100")            
             .required(false)
             .takes_value(true))
         .arg(Arg::with_name("idFrame")
@@ -56,19 +59,26 @@ fn cli_interface() {
         println!("Value for idType: {}", o);
     }
 
+    let mut dev_no: u16 = 0;    
     if let Some(o) = matches.value_of("interfaceName") {
-        println!("Value for interfaceName: {}", o);
+        dev_no = u16::from_str(o).unwrap_or(0);
+        println!("Value for interfaceName: {}", dev_no);
     }
+
+    return dev_no;
 }
 
 fn main() {
 
-    cli_interface();
+    let dev_no = cli_interface();
 
     let context = zmq::Context::new();
     let requester = context.socket(zmq::REQ).unwrap();
 
-    assert!(requester.connect("tcp://localhost:5555").is_ok());
+    let bb: &str = &(common::ZERO_MQ_STARTING_PORT + dev_no).to_string();
+    println!("zeroMQ port:{}",bb);
+    assert!(requester.connect(&format!("tcp://localhost:{}",bb)).is_ok());
+
 
     let mut msg = zmq::Message::new();
 
