@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
+pub const CONFIG_PATH: &str = "./../../config/";
 pub const ZERO_MQ_STARTING_PORT:u16 = 5555;
 
 pub fn read_data_from_json(filename: &str) -> String {
